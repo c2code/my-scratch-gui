@@ -758,8 +758,10 @@ const mapStateToProps = state => {
         loginMenuOpen: loginMenuOpen(state),
         projectChanged: state.scratchGui.projectChanged,
         projectTitle: state.scratchGui.projectTitle,
-        sessionExists: state.session && typeof state.session.session !== 'undefined',
-        username: user ? user.username : null
+        //sessionExists: state.session && typeof state.session.session !== 'undefined',
+        //username: user ? user.username : null
+        sessionExists: true,
+        username: "richer"
     };
 };
 
