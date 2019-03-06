@@ -627,12 +627,13 @@ class MenuBar extends React.Component {
                                 >
                                     <Button
                                         className={styles.feedbackButton}
-                                        iconSrc={feedbackIcon}
+                                        /*iconSrc={feedbackIcon}*/
                                     >
                                         <FormattedMessage
-                                            defaultMessage="Give Feedback"
+                                            defaultMessage="提交作业"
                                             description="Label for feedback form modal button"
-                                            id="gui.menuBar.giveFeedback"
+                                            id="gui.menuBar.commitwork"
+                                            /*id="gui.menuBar.giveFeedback"*/
                                         />
                                     </Button>
                                 </a>
@@ -758,10 +759,10 @@ const mapStateToProps = state => {
         loginMenuOpen: loginMenuOpen(state),
         projectChanged: state.scratchGui.projectChanged,
         projectTitle: state.scratchGui.projectTitle,
-        //sessionExists: state.session && typeof state.session.session !== 'undefined',
-        //username: user ? user.username : null
-        sessionExists: true,
-        username: "richer"
+        sessionExists: state.session && typeof state.session.session !== 'undefined',
+        username: user ? user.username : null
+        //sessionExists: true,
+        //username: "richer"
     };
 };
 
