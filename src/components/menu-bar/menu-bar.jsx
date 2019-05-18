@@ -25,6 +25,8 @@ import SB3Downloader from '../../containers/sb3-downloader.jsx';
 import DeletionRestorer from '../../containers/deletion-restorer.jsx';
 import TurboMode from '../../containers/turbo-mode.jsx';
 
+import FileToServer from '../../containers/filetoserver.jsx';
+
 import {openTipsLibrary} from '../../reducers/modals';
 import {setPlayer} from '../../reducers/mode';
 import {
@@ -358,9 +360,11 @@ class MenuBar extends React.Component {
                                 {(this.props.canSave || this.props.canCreateCopy || this.props.canRemix) && (
                                     <MenuSection>
                                         {this.props.canSave ? (
-                                            <MenuItem onClick={this.handleClickSave}>
+                                            <FileToServer>{SaveProject => (
+                                            <MenuItem onClick={this.handleCloseFileMenuAndThen(SaveProject)}>
                                                 {saveNowMessage}
                                             </MenuItem>
+                                            )}</FileToServer>
                                         ) : []}
                                         {this.props.canCreateCopy ? (
                                             <MenuItem onClick={this.handleClickSaveAsCopy}>
