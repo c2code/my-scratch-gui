@@ -14,6 +14,7 @@ import {
 } from '../../reducers/alerts';
 
 import styles from './save-status.css';
+import FileToServer from '../../containers/filetoserver.jsx';
 
 // Wrapper for inline messages in the nav bar, which are all related to saving.
 // Show any inline messages if present, else show the "Save Now" button if the
@@ -28,16 +29,18 @@ const SaveStatus = ({
     filterInlineAlerts(alertsList).length > 0 ? (
         <InlineMessages />
     ) : projectChanged && (
-        <div
+        <FileToServer>{SaveProject => (
+            <div
             className={styles.saveNow}
-            onClick={onClickSave}
-        >
-            <FormattedMessage
-                defaultMessage="Save Now"
-                description="Title bar link for saving now"
-                id="gui.menuBar.saveNowLink"
-            />
-        </div>
+            onClick={onClickSave(SaveProject)}
+            >
+                <FormattedMessage
+                    defaultMessage="Save Now"
+                    description="Title bar link for saving now"
+                    id="gui.menuBar.saveNowLink"
+                />
+            </div>
+        )}</FileToServer>
     ));
 
 SaveStatus.propTypes = {

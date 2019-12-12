@@ -221,6 +221,7 @@ class MenuBar extends React.Component {
             fn();
         };
     }
+
     handleLanguageMouseUp (e) {
         if (!this.props.languageMenuOpen) {
             this.props.onClickLanguage(e);
@@ -261,6 +262,14 @@ class MenuBar extends React.Component {
                 defaultMessage="Save now"
                 description="Menu bar item for saving now"
                 id="gui.menuBar.saveNow"
+            />
+        );
+        const submitHomework = (
+            <FormattedMessage
+                defaultMessage="Submit work"
+                description="Label for feedback form modal button"
+                id="gui.menuBar.commitwork"
+                /*id="gui.menuBar.giveFeedback"*/
             />
         );
         const createCopyMessage = (
@@ -317,7 +326,7 @@ class MenuBar extends React.Component {
                                 onClick={this.props.onClickLogo}
                             />
                         </div>
-                        <div
+                        {/*<div
                             className={classNames(styles.menuBarItem, styles.hoverable, styles.languageMenu)}
                         >
                             <div>
@@ -331,8 +340,8 @@ class MenuBar extends React.Component {
                                 />
                             </div>
                             <LanguageSelector label={this.props.intl.formatMessage(ariaMessages.language)} />
-                        </div>
-                        <div
+                        </div>*/}
+                        {/*<div
                             className={classNames(styles.menuBarItem, styles.hoverable, {
                                 [styles.active]: this.props.fileMenuOpen
                             })}
@@ -410,7 +419,7 @@ class MenuBar extends React.Component {
                                     )}</SB3Downloader>
                                 </MenuSection>
                             </MenuBarMenu>
-                        </div>
+                        </div>*/}
                         <div
                             className={classNames(styles.menuBarItem, styles.hoverable, {
                                 [styles.active]: this.props.editMenuOpen
@@ -536,16 +545,19 @@ class MenuBar extends React.Component {
                             )
                         ) : ([])}
                     </div>
-                </div>
+                {/*</div>*/}
 
                 {/* show the proper UI in the account menu, given whether the user is
                 logged in, and whether a session is available to log in with */}
-                <div className={styles.accountInfoGroup}>
-                    <div className={styles.menuBarItem}>
-                        {this.props.canSave && (
-                            <SaveStatus />
-                        )}
-                    </div>
+                {/*<div className={styles.accountInfoGroup}>*/}
+                    <FileToServer>{SaveProject => (
+                            <div className={classNames(styles.menuBarItem, styles.hoverable, {
+                                [styles.active]: this.props.fileMenuOpen
+                            })}
+                            onClick={this.handleCloseFileMenuAndThen(SaveProject)}>
+                                {saveNowMessage}
+                            </div>
+                    )}</FileToServer>
                     {this.props.sessionExists ? (
                         this.props.username ? (
                             // ************ user is logged in ************
@@ -622,26 +634,14 @@ class MenuBar extends React.Component {
                     ) : (
                         // ******** no login session is available, so don't show login stuff
                         <React.Fragment>
-                            <div className={classNames(styles.menuBarItem, styles.feedbackButtonWrapper)}>
-                                <a
-                                    className={styles.feedbackLink}
-                                    href="#"
-                                    rel="noopener noreferrer"
-                                    target="_blank"
-                                >
-                                    <Button
-                                        className={styles.feedbackButton}
-                                        /*iconSrc={feedbackIcon}*/
-                                    >
-                                        <FormattedMessage
-                                            defaultMessage="提交作业"
-                                            description="Label for feedback form modal button"
-                                            id="gui.menuBar.commitwork"
-                                            /*id="gui.menuBar.giveFeedback"*/
-                                        />
-                                    </Button>
-                                </a>
+                            <FileToServer>{SaveProject => (
+                            <div className={classNames(styles.menuBarItem, styles.hoverable, {
+                                [styles.active]: this.props.fileMenuOpen
+                            })}
+                            onClick={this.handleCloseFileMenuAndThen(SaveProject)}>
+                                {submitHomework}
                             </div>
+                            )}</FileToServer>
                             {this.props.showComingSoon ? (
                                 <React.Fragment>
                                     <MenuBarItemTooltip id="mystuff">
@@ -794,3 +794,4 @@ export default injectIntl(connect(
     mapStateToProps,
     mapDispatchToProps
 )(MenuBar));
+

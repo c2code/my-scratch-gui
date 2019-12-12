@@ -55,7 +55,7 @@ class FileToServer extends React.Component {
                     this.getPicture(props, content);
                 } else {
                     console.log(imgblob.size);
-                    // document.body.appendChild(canvas);// 在界面下方生成一个div,展示截取到的作品缩略图
+                    //document.body.appendChild(canvas);// 在界面下方生成一个div,展示截取到的作品缩略图
                     const xmlhttp = new XMLHttpRequest();
                     const url = 'http://test.tuopinpin.com/test/gui/';
                     const form = new FormData();
