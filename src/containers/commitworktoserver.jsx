@@ -21,7 +21,7 @@ import html2canvas from './html2canvas.min';
  *     />
  * )}</ProjectSaver>
  */
-class FileToServer extends React.Component {
+class HomeworkToServer extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
@@ -37,6 +37,7 @@ class FileToServer extends React.Component {
             this.getPicture(this.props, content);
         });
         this.doStoreProject();
+        this.updateProject();
 
     }
 
@@ -98,21 +99,29 @@ class FileToServer extends React.Component {
                 const xmlhttp = new XMLHttpRequest();
                 const url = 'http://localhost:8088/api/homework/upload';
                 xmlhttp.open('POST', url, true);
-                xmlhttp.setRequestHeader('Authorization', document.location.search.split('&')[0].split('=')[1].toString())
+                xmlhttp.setRequestHeader('Authorization', document.location.search.split('&')[0].split('=')[1].toString());
                 const body = new FormData();
                 body.append('upload', content, 'sb3_file');
                 body.append('uid', document.location.search.split('&')[1].split('=')[1].toString());   
                 body.append('cid', document.location.search.split('&')[2].split('=')[1].toString());   
                 xmlhttp.send(body);
             });
-        alert('保存成功!');
+        alert('提交作业成功!');
     }
     createProject () {
-        //return this.doStoreProject();
-        alert('hhhhh!');
+        return this.doStoreProject();
     }
     updateProject () {
-        return this.doStoreProject(this.props.projectId);
+        var data;
+        const xmlhttp = new XMLHttpRequest();
+        const url = 'http://localhost:8088/api/homework/update';
+        xmlhttp.open('POST', url, true);
+        xmlhttp.setRequestHeader('Authorization', document.location.search.split('&')[0].split('=')[1].toString());
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        var uid = document.location.search.split('&')[1].split('=')[1].toString();
+        var cid = document.location.search.split('&')[2].split('=')[1].toString();
+        data = JSON.stringify({"hstatus": "已提交", "uid":uid*1, "cid":cid*1});
+        xmlhttp.send(data);
     }
     render () {
         const {
@@ -134,7 +143,7 @@ const getProjectFilename = (curTitle, defaultTitle) => {
     return `${filenameTitle.substring(0, 100)}.sb3`;
 };
 
-FileToServer.propTypes = {
+HomeworkToServer.propTypes = {
     children: PropTypes.func,
     projectFilename: PropTypes.string,
     projectId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -150,4 +159,4 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     () => ({}) // omit dispatch prop
-)(FileToServer);
+)(HomeworkToServer);

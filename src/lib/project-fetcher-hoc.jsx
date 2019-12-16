@@ -22,6 +22,10 @@ import {
 
 import log from './log';
 import storage from './storage';
+import analytics from '../lib/analytics';
+import VM from 'scratch-vm';
+
+//import SBFileUploader from '../../containers/sb-file-uploader.jsx';
 
 /* Higher Order Component to provide behavior for loading projects by id. If
  * there's no id, the default project is loaded.
@@ -42,6 +46,7 @@ const ProjectFetcherHOC = function (WrappedComponent) {
             // or it may be set by an even higher HOC, and passed to us.
             // Either way, we now know what the initial projectId should be, so
             // set it in the redux store.
+
             if (
                 props.projectId !== '' &&
                 props.projectId !== null &&
@@ -68,21 +73,77 @@ const ProjectFetcherHOC = function (WrappedComponent) {
             }
         }
         fetchProject (projectId, loadingState) {
-            return storage
-                .load(storage.AssetType.Project, projectId, storage.DataFormat.JSON)
-                .then(projectAsset => {
-                    if (projectAsset) {
-                        this.props.onFetchedProjectData(projectAsset.data, loadingState);
-                    } else {
-                        // Treat failure to load as an error
-                        // Throw to be caught by catch later on
-                        throw new Error('Could not find project');
-                    }
-                })
-                .catch(err => {
-                    this.props.onError(err);
-                    log.error(err);
-                });
+            var tok = ""
+            var uid
+            var cid
+            if (document.location.search !== ""){
+                tok = document.location.search.split('&')[0].split('=')[1].toString();   
+                uid = document.location.search.split('&')[1].split('=')[1].toString();   
+                cid = document.location.search.split('&')[2].split('=')[1].toString();   
+            }
+
+            if (tok != "") {
+                let readyLoad=sessionStorage.getItem("readyLoad");
+                if (readyLoad!=null && readyLoad!='null'&& readyLoad!=""&& readyLoad!=undefined ){
+                    projectId=readyLoad
+                }else{
+                    //projectId='885318eb-ad83-44c4-afe3-d3bea0a0d2ab.sb3'
+                    storage.setProjectHost('http://localhost:8088/api/myhomework/download?uid='+uid+'&cid='+cid);
+                    projectId=''
+                }
+                return storage
+                    .load(storage.AssetType.Project, projectId, storage.DataFormat.JSON)
+                    .then(projectAsset => {
+                        if (projectAsset) {
+                           // $("#projectName").val(projectAsset.assetType.name)
+                            this.props.onFetchedProjectData(projectAsset.data, loadingState);
+                            //加载后从缓存从移除，以免后续加载(新建)出问题
+                            sessionStorage.removeItem("readyLoad");
+                        } else {
+                            // Treat failure to load as an error
+                            // Throw to be caught by catch later on
+                            //throw new Error('Could not find project');
+                            sessionStorage.removeItem("readyLoad");
+                            storage.setProjectHost(this.props.projectHost)
+                            projectId=0
+                            return storage
+                                .load(storage.AssetType.Project, projectId, storage.DataFormat.JSON)
+                                .then(projectAsset => {
+                                    if (projectAsset) {
+                                        this.props.onFetchedProjectData(projectAsset.data, loadingState);
+                                    } else {
+                                        // Treat failure to load as an error
+                                        // Throw to be caught by catch later on
+                                        throw new Error('Could not find project');
+                                    }
+                                })
+                                .catch(err => {
+                                    this.props.onError(err);
+                                    log.error(err);
+                                });
+                        }
+                    })
+                    .catch(err => {
+                        this.props.onError(err);
+                        log.error(err);
+                    });
+            } else {
+                return storage
+                    .load(storage.AssetType.Project, projectId, storage.DataFormat.JSON)
+                    .then(projectAsset => {
+                        if (projectAsset) {
+                            this.props.onFetchedProjectData(projectAsset.data, loadingState);
+                        } else {
+                            // Treat failure to load as an error
+                            // Throw to be caught by catch later on
+                            throw new Error('Could not find project');
+                        }
+                    })
+                    .catch(err => {
+                        this.props.onError(err);
+                        log.error(err);
+                    });
+            }
         }
         render () {
             const {
@@ -125,7 +186,8 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         projectHost: PropTypes.string,
         projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         reduxProjectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        setProjectId: PropTypes.func
+        setProjectId: PropTypes.func,
+        vm: PropTypes.instanceOf(VM).isRequired
     };
     ProjectFetcherComponent.defaultProps = {
         assetHost: 'https://assets.scratch.mit.edu',
@@ -138,7 +200,8 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         isLoadingProject: getIsLoading(state.scratchGui.projectState.loadingState),
         isShowingProject: getIsShowingProject(state.scratchGui.projectState.loadingState),
         loadingState: state.scratchGui.projectState.loadingState,
-        reduxProjectId: state.scratchGui.projectState.projectId
+        reduxProjectId: state.scratchGui.projectState.projectId,
+        vm: state.scratchGui.vm
     });
     const mapDispatchToProps = dispatch => ({
         onActivateTab: tab => dispatch(activateTab(tab)),

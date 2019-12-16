@@ -39,6 +39,8 @@ import cloudManagerHOC from '../lib/cloud-manager-hoc.jsx';
 import GUIComponent from '../components/gui/gui.jsx';
 import {setIsScratchDesktop} from '../lib/isScratchDesktop.js';
 
+import analytics from '../lib/analytics';
+
 const messages = defineMessages({
     defaultProjectTitle: {
         id: 'gui.gui.defaultProjectTitle',
@@ -49,6 +51,44 @@ const messages = defineMessages({
 
 class GUI extends React.Component {
     componentDidMount () {
+        /*var tok = ""
+        var uid
+        var cid
+        if (document.location.search !== ""){
+            tok = document.location.search.split('&')[0].split('=')[1].toString();   
+            uid = document.location.search.split('&')[1].split('=')[1].toString();   
+            cid = document.location.search.split('&')[2].split('=')[1].toString();   
+        }
+        const url = "http://localhost:8088/api/homework/download?cid=" + cid + "&uid=" + uid;
+        if (tok !== ""){
+            this.fileToUpload = null;
+            if (this.fileInput) {
+                this.fileInput.value = null;
+            }
+
+            fetch(url, {method: 'GET',
+                headers: {
+                    'Authorization': tok
+                }
+            })
+                .then(response => response.blob())
+                .then(blob => {
+                    const reader = new FileReader();
+                    reader.onload = () => this.props.vm.loadProject(reader.result)
+                        .then(() => {
+                            console.log(reader);
+                            analytics.event({
+                                category:'project',
+                                action: 'Import Project File',
+                                nonInteraction: true
+                            });
+                        });
+                    reader.readAsArrayBuffer(blob);
+                })
+                .catch(error => {
+                    alert('远程加载文件错误! $(error)')
+                });
+        }*/
         setIsScratchDesktop(this.props.isScratchDesktop);
         this.setReduxTitle(this.props.projectTitle);
         this.props.onStorageInit(storage);

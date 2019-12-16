@@ -26,6 +26,7 @@ import DeletionRestorer from '../../containers/deletion-restorer.jsx';
 import TurboMode from '../../containers/turbo-mode.jsx';
 
 import FileToServer from '../../containers/filetoserver.jsx';
+import HomeworkToServer from '../../containers/commitworktoserver.jsx';
 
 import {openTipsLibrary} from '../../reducers/modals';
 import {setPlayer} from '../../reducers/mode';
@@ -259,7 +260,7 @@ class MenuBar extends React.Component {
     render () {
         const saveNowMessage = (
             <FormattedMessage
-                defaultMessage="Save now"
+                defaultMessage="Save"
                 description="Menu bar item for saving now"
                 id="gui.menuBar.saveNow"
             />
@@ -470,7 +471,7 @@ class MenuBar extends React.Component {
                         </div>
                     </div>
                     {/*<Divider className={classNames(styles.divider)} />去掉分割的竖线*/}
-                    <div
+                    {/*教程<div
                         aria-label={this.props.intl.formatMessage(ariaMessages.tutorials)}
                         className={classNames(styles.menuBarItem, styles.hoverable)}
                         onClick={this.props.onOpenTipLibrary}
@@ -480,7 +481,7 @@ class MenuBar extends React.Component {
                             src={helpIcon}
                         />
                         <FormattedMessage {...ariaMessages.tutorials} />
-                    </div>
+                    </div>*/}
                     {/*<Divider className={classNames(styles.divider)} />
                     {this.props.canEditTitle ? (
                         <div className={classNames(styles.menuBarItem, styles.growable)}>
@@ -558,6 +559,7 @@ class MenuBar extends React.Component {
                                 {saveNowMessage}
                             </div>
                     )}</FileToServer>
+                    <Divider className={classNames(styles.divider)} />
                     {this.props.sessionExists ? (
                         this.props.username ? (
                             // ************ user is logged in ************
@@ -634,14 +636,14 @@ class MenuBar extends React.Component {
                     ) : (
                         // ******** no login session is available, so don't show login stuff
                         <React.Fragment>
-                            <FileToServer>{SaveProject => (
+                            <HomeworkToServer>{SaveProject => (
                             <div className={classNames(styles.menuBarItem, styles.hoverable, {
                                 [styles.active]: this.props.fileMenuOpen
                             })}
                             onClick={this.handleCloseFileMenuAndThen(SaveProject)}>
                                 {submitHomework}
                             </div>
-                            )}</FileToServer>
+                            )}</HomeworkToServer>
                             {this.props.showComingSoon ? (
                                 <React.Fragment>
                                     <MenuBarItemTooltip id="mystuff">
