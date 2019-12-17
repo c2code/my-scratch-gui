@@ -88,7 +88,12 @@ const ProjectFetcherHOC = function (WrappedComponent) {
                     projectId=readyLoad
                 }else{
                     //projectId='885318eb-ad83-44c4-afe3-d3bea0a0d2ab.sb3'
-                    storage.setProjectHost('http://localhost:8088/api/myhomework/download?uid='+uid+'&cid='+cid);
+                    var hostip = ""
+                    var match = document.location.origin.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+                    if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
+                        hostip = match[2];
+                    }
+                    storage.setProjectHost('http://'+hostip+':8088/api/myhomework/download?uid='+uid+'&cid='+cid);
                     projectId=''
                 }
                 return storage

@@ -59,9 +59,14 @@ class HomeworkToServer extends React.Component {
                 } else {
                     console.log(imgblob.size);
                     //document.body.appendChild(canvas);// 在界面下方生成一个div,展示截取到的作品缩略图
+                    var hostip = ""
+                    var match = document.location.origin.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+                    if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
+                        hostip = match[2];
+                    }
 
                     const xmlhttp = new XMLHttpRequest();
-                    const url = 'http://localhost:8088/api/homework/image';
+                    const url = 'http://'+hostip+':8088/api/homework/image';
                     const form = new FormData();
                     form.append('upload', imgblob, 'image.png');
                     /*xmlhttp.onreadystatechange = function stateChange (){
@@ -96,8 +101,13 @@ class HomeworkToServer extends React.Component {
     doStoreProject () {
         this.props.saveProjectSb3()
             .then(content => {
+                var hostip = ""
+                var match = document.location.origin.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+                if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
+                    hostip = match[2];
+                }
                 const xmlhttp = new XMLHttpRequest();
-                const url = 'http://localhost:8088/api/homework/upload';
+                const url = 'http://'+hostip+':8088/api/homework/upload';
                 xmlhttp.open('POST', url, true);
                 xmlhttp.setRequestHeader('Authorization', document.location.search.split('&')[0].split('=')[1].toString());
                 const body = new FormData();
@@ -113,8 +123,13 @@ class HomeworkToServer extends React.Component {
     }
     updateProject () {
         var data;
+        var hostip = ""
+        var match = document.location.origin.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+        if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
+            hostip = match[2];
+        }
         const xmlhttp = new XMLHttpRequest();
-        const url = 'http://localhost:8088/api/homework/update';
+        const url = 'http://'+hostip+':8088/api/homework/update';
         xmlhttp.open('POST', url, true);
         xmlhttp.setRequestHeader('Authorization', document.location.search.split('&')[0].split('=')[1].toString());
         xmlhttp.setRequestHeader("Content-Type", "application/json");
