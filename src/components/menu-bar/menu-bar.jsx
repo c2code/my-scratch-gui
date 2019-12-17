@@ -260,14 +260,14 @@ class MenuBar extends React.Component {
     render () {
         const saveNowMessage = (
             <FormattedMessage
-                defaultMessage="Save"
+                defaultMessage="保存"
                 description="Menu bar item for saving now"
                 id="gui.menuBar.saveNow"
             />
         );
         const submitHomework = (
             <FormattedMessage
-                defaultMessage="Submit work"
+                defaultMessage="提交作业"
                 description="Label for feedback form modal button"
                 id="gui.menuBar.commitwork"
                 /*id="gui.menuBar.giveFeedback"*/
