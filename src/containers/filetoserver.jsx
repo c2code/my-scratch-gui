@@ -6,6 +6,8 @@ import storage from '../lib/storage';
 import {projectTitleInitialState} from '../reducers/project-title';
 import html2canvas from './html2canvas.min';
 
+import VM from 'scratch-vm';
+
 
 /**
  * Project saver component passes a saveProject function to its child.
@@ -43,6 +45,9 @@ class FileToServer extends React.Component {
     getPicture (props, content){
         html2canvas(document.getElementsByClassName('stage_stage-wrapper_eRRuk box_box_2jjDp')[0])
             .then(canvas => {
+                //this.renderer.draw();
+                let render = props.vm.renderer
+                render.draw()
                 const image = new Image();
                 image.src = canvas.toDataURL('image/png');
                 const bytes = window.atob(image.src.split(',')[1]);
@@ -148,13 +153,15 @@ FileToServer.propTypes = {
     children: PropTypes.func,
     projectFilename: PropTypes.string,
     projectId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    saveProjectSb3: PropTypes.func
+    saveProjectSb3: PropTypes.func,
+    vm: PropTypes.instanceOf(VM).isRequired
 };
 
 const mapStateToProps = state => ({
     saveProjectSb3: state.scratchGui.vm.saveProjectSb3.bind(state.scratchGui.vm),
     projectFilename: getProjectFilename(state.scratchGui.projectTitle, projectTitleInitialState),
-    projectId: state.scratchGui.projectId
+    projectId: state.scratchGui.projectId,
+    vm: state.scratchGui.vm
 });
 
 export default connect(
