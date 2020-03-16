@@ -39,6 +39,7 @@ class FileToServer extends React.Component {
             this.getPicture(this.props, content);
         });
         this.doStoreProject();
+        alert('保存成功!');
 
     }
 
@@ -49,7 +50,7 @@ class FileToServer extends React.Component {
                 let render = props.vm.renderer
                 render.draw()
                 const image = new Image();
-                image.src = canvas.toDataURL('image/png');
+                image.src = canvas.toDataURL('image/png',0.7);
                 const bytes = window.atob(image.src.split(',')[1]);
                 // 处理异常,将ascii码小于0的转换为大于0
                 const ab = new ArrayBuffer(bytes.length);
@@ -120,7 +121,7 @@ class FileToServer extends React.Component {
                 body.append('cid', document.location.search.split('&')[2].split('=')[1].toString());   
                 xmlhttp.send(body);
             });
-        alert('保存成功!');
+        //alert('保存成功!');
     }
     createProject () {
         //return this.doStoreProject();
