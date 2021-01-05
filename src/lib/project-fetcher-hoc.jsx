@@ -194,9 +194,16 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         setProjectId: PropTypes.func,
         vm: PropTypes.instanceOf(VM).isRequired
     };
+    var phostip = ""
+    var match = document.location.origin.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+    if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
+        phostip = match[2];
+    }
     ProjectFetcherComponent.defaultProps = {
-        assetHost: 'https://assets.scratch.mit.edu',
-        projectHost: 'https://projects.scratch.mit.edu'
+        assetHost: 'http://' + phostip + ':8601',
+        projectHost: 'http://' + phostip + ':8601'
+        //assetHost: 'https://assets.scratch.mit.edu',
+        //projectHost: 'https://projects.scratch.mit.edu'
     };
 
     const mapStateToProps = state => ({
