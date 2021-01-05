@@ -173,8 +173,13 @@ class LibraryComponent extends React.Component {
                     ref={this.setFilteredDataRef}
                 >
                     {this.getFilteredData().map((dataItem, index) => {
+                        var phostip = ""
+                        var match = document.location.origin.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+                        if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
+                            phostip = match[2];
+                        }
                         const scratchURL = dataItem.md5 ?
-                            `https://cdn.assets.scratch.mit.edu/internalapi/asset/${dataItem.md5}/get/` :
+                            `http://${phostip}:8601/static/assets/${dataItem.md5}` :
                             dataItem.rawURL;
                         return (
                             <LibraryItem
